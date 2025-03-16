@@ -11,47 +11,48 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class InventoryPage extends BasePage {
-    //Init
-    public InventoryPage(WebDriver driver) {
-        super(driver);  // Calling BasePage's constructor
-    }
+    public InventoryPage(WebDriver driver) { super(driver); }
 
-    //region Elements + Selectors
+    //Elements
+    @FindBy(css = "[data-test='shopping-cart-link']")
+    WebElement CheckoutButton;
+
     @FindBys(value = @FindBy(css = "[data-test='inventory-item-name']"))
-    List<WebElement> allProductNames;
+    List<WebElement> AllProductNames;
 
     @FindBys(value = @FindBy(css = "[data-test='inventory-item-desc']"))
-    List<WebElement> allProductDescriptions;
+    List<WebElement> AllProductDescriptions;
 
     @FindBys(value = @FindBy(css = "[data-test='inventory-item-price']"))
-    List<WebElement> allProductPrices;
+    List<WebElement> AllProductPrices;
 
     @FindBys(value = @FindBy(css = "[data-test*='add-to-cart']"))
-    List<WebElement> allAddToCartButtons;
+    List<WebElement> AllAddToCartButtons;
 
-    Stream<Product> AllProducts = SetupProducts().stream();
-    //endregion
+    public Stream<Product> AllProducts = SetupProducts().stream();
 
-    //region Methods
-    public void AddToCart(String productName) {
-        AllProducts.filter(x -> x.getName().getText().contains(productName)).findFirst().get().getAddCartButton().click();
+    //Methods
+    public void addToCart(String productName) {
+        Product product = AllProducts.filter(x -> x.getName().getText().contains(productName)).toList().getFirst();
+        product.getAddCartButton().click();
     }
-    //endregion
 
+    public void clickCheckoutButton() {
+        CheckoutButton.click();
+    }
 
-    //region Helper
-    public List<Product> SetupProducts() {
+    //Helpers
+    private List<Product> SetupProducts() {
         List<Product> products = new ArrayList<>();
-        for (int i = 0; i < allAddToCartButtons.size(); i++) {
+        for (int i = 0; i < AllAddToCartButtons.size(); i++) {
             Product currentProduct = new Product();
-            currentProduct.setName(allProductNames.get(i));
-            currentProduct.setDescription(allProductDescriptions.get(i));
-            currentProduct.setPrice(allProductPrices.get(i));
-            currentProduct.setAddCartButton(allAddToCartButtons.get(i));
+            currentProduct.setName(AllProductNames.get(i));
+            currentProduct.setDescription(AllProductDescriptions.get(i));
+            currentProduct.setPrice(AllProductPrices.get(i));
+            currentProduct.setAddCartButton(AllAddToCartButtons.get(i));
             products.add(currentProduct);
         }
         return products;
     }
-    //endregion
 }
 
