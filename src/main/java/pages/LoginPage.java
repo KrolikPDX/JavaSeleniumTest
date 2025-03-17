@@ -30,5 +30,5 @@ public class LoginPage extends BasePage {
         PasswordField.sendKeys(password);
     }
 
-    public void clickLogin() { LoginButton.click(); }
+    public void clickLoginButton() { LoginButton.click(); }
 }

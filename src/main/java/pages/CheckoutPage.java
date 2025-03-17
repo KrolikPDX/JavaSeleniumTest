@@ -29,6 +29,9 @@ public class CheckoutPage extends BasePage {
     @FindBy(css = "[data-test='pony-express']")
     WebElement CheckoutImage;
 
+    @FindBy(css = "[data-test='back-to-products']")
+    WebElement BackHomeButton;
+
     //Methods
     public void enterFirstName(String firstName) {
         FirstNameField.sendKeys(firstName);
@@ -56,6 +59,10 @@ public class CheckoutPage extends BasePage {
 
     public boolean successCheckoutImageDisplayed() {
         return CheckoutImage.isDisplayed();
+    }
+
+    public boolean backHomeButtonDisplayed() {
+        return BackHomeButton.isDisplayed();
     }
 }
 

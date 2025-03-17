@@ -6,11 +6,13 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
 import pages.CartPage;
 import pages.CheckoutPage;
 import pages.InventoryPage;
 import pages.LoginPage;
 
+//Original test setup - Moved to feature files
 public class CheckoutTest {
     WebDriver driver = null;
 
@@ -20,18 +22,26 @@ public class CheckoutTest {
     }
 
     @Test
-    void ValidateCheckout() {
+    void validateLoginPageDisplayed() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.navigate();
+
+        Assert.assertTrue(loginPage.pageDisplayed(), "Login page url did not match what's expected");
+    }
+
+    @Test
+    void validateCheckout() {
         //Login to page
         LoginPage loginPage = new LoginPage(driver);
         loginPage.navigate();
         loginPage.enterUsername("standard_user");
         loginPage.enterPassword("secret_sauce");
-        loginPage.clickLogin();
+        loginPage.clickLoginButton();
 
         //Add item to cart, click checkout
         InventoryPage inventoryPage = new InventoryPage(driver);
         inventoryPage.addToCart("Sauce Labs Backpack");
-        inventoryPage.clickCheckoutButton();
+        inventoryPage.clickCartButton();
 
         //Click checkout button in cart page
         CartPage cartPage = new CartPage(driver);
@@ -47,15 +57,7 @@ public class CheckoutTest {
 
         //Validate success
         Assert.assertTrue(checkoutPage.successCheckoutImageDisplayed(), "Success checkout image was not displayed");
-        Assert.assertEquals("Thank you for your order!", checkoutPage.getThankYouHeaderText(), "Unexpected thank you text found on checkout page");
-    }
-
-    @Test
-    void validateLoginPageDisplayed() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.navigate();
-
-        Assert.assertTrue(loginPage.pageDisplayed(), "Login page url did not match what's expected");
+        Assert.assertEquals(checkoutPage.getThankYouHeaderText(),"Thank you for your order!", "Unexpected thank you text found on checkout page");
     }
 
     @AfterTest
